@@ -23,6 +23,13 @@ function addTask() {
         alert('Please enter a task!');
         return;
     }
+
+     // Prevent duplicate tasks (case-insensitive)
+    const exists = tasks.some(t => t.text.toLowerCase() === text.toLowerCase());
+    if (exists) {
+        alert('This task already exists!');
+        return;
+    }
     
     const task = {
         id: Date.now(),
