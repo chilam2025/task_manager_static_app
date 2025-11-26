@@ -8,6 +8,7 @@ const addBtn = document.getElementById('addBtn');
 const taskList = document.getElementById('taskList');
 const filterBtns = document.querySelectorAll('.filter-btn');
 
+
 // Initialize app
 function init() {
     renderTasks();
@@ -84,3 +85,46 @@ function deleteTask(id) {
     renderTasks();
     updateStats();
 }
+
+// Handle filter button clicks
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Remove 'active' class from all
+        filterBtns.forEach(b => b.classList.remove('active'));
+
+        // Add active class to clicked button
+        btn.classList.add('active');
+
+        // Set current filter
+        currentFilter = btn.dataset.filter;
+
+        // Re-render tasks based on selected filter
+        renderTasks();
+    });
+});
+
+// Update task statistics
+function updateStats() {
+    const total = tasks.length;
+    const completed = tasks.filter(t => t.completed).length;
+
+    document.getElementById('totalTasks').textContent = `${total} tasks`;
+    document.getElementById('completedTasks').textContent = `${completed} completed`;
+}
+
+// Edit existing task
+function editTask(id) {
+    const task = tasks.find(t => t.id === id);
+    const newText = prompt("Edit task:", task.text);
+
+    // If user clicks Cancel or leaves blank, do nothing
+    if (newText === null || newText.trim() === "") return;
+
+    task.text = newText.trim();
+    saveTasks();
+    renderTasks();
+    updateStats();
+}
+
+// Start the application
+window.onload = init;
